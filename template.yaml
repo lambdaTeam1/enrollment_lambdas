@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: A streamlined AWS Lambda Java application for user management
+
+Globals:
+  Function:
+    Runtime: java17
+    CodeUri: .
+    Timeout: 120 
+
+Resources:
+  UsersLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.users.UsersLambdaHandler::handleRequest 
+      Events:
+        UserApi:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+
+  HelpDeskTicketLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.helpdesk.HelpDeskTicketLambdaHandler::handleRequest 
+      Events:
+        HelpDeskTicketApi:
+          Type: Api
+          Properties:
+            Path: /tickets
+            Method: post
+
+  LoginLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.login.LoginLambdaHandler::handleRequest 
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post

@@ -1,0 +1,6 @@
+com\example\lambda\UsersLambdaHandler.class
+com\example\lambda\HelpDeskTicketLambdaHandler.class
+com\example\lambda\LoginLambdaHandler$User.class
+com\example\lambda\UsersLambdaHandler$User.class
+com\example\lambda\HelpDeskTicketLambdaHandler$HelpDeskTicket.class
+com\example\lambda\LoginLambdaHandler.class
