@@ -1,1 +1,19 @@
 dependency-reduced-pom.xml
+/target/
+!.mvn/wrapper/maven-wrapper.jar  # Allow Maven Wrapper
+.idea/
+*.iml
+*.ipr
+*.iws
+/.settings/
+/.project
+/.classpath
+*.class
+/log/
+*.log
+*.log.*
+*.out
+/bin/
+/lib/
+.DS_Store
+Thumbs.db
