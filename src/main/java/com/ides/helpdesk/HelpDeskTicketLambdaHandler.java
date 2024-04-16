@@ -43,8 +43,8 @@ public class HelpDeskTicketLambdaHandler implements RequestHandler<APIGatewayPro
                 statement.setString(5, ticket.getUserType());
                 statement.setString(6, ticket.getTopic());
                 statement.setString(7, ticket.getSupportRequest());
-                statement.setTimestamp(8, new Timestamp(System.currentTimeMillis()));  // Assuming the current time for creation
-                statement.setTimestamp(9, new Timestamp(System.currentTimeMillis()));  // Same for update timestamp
+                statement.setTimestamp(8, new Timestamp(System.currentTimeMillis()));  
+                statement.setTimestamp(9, new Timestamp(System.currentTimeMillis())); 
                 statement.executeUpdate();
             }
         }

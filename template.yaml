@@ -41,3 +41,25 @@ Resources:
           Properties:
             Path: /login
             Method: post
+
+  GIINVerificationLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.giinverification.GIINVerificationLambdaHandler::handleRequest 
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /getgiin
+            Method: post
+
+  HCTAEnrollmentValidatorLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.giinverification.HCTAEnrollmentValidatorLambdaHandler::handleRequest 
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /hcta
+            Method: post

@@ -1,6 +1,10 @@
-com\example\lambda\UsersLambdaHandler.class
-com\example\lambda\HelpDeskTicketLambdaHandler.class
-com\example\lambda\LoginLambdaHandler$User.class
-com\example\lambda\UsersLambdaHandler$User.class
-com\example\lambda\HelpDeskTicketLambdaHandler$HelpDeskTicket.class
-com\example\lambda\LoginLambdaHandler.class
+com\ides\giinverification\GIINVerificationLambdaHandler$GIIN.class
+com\ides\login\LoginLambdaHandler$User.class
+com\ides\giinverification\HCTAEnrollmentValidatorLambdaHandler$EnrollmentRequest.class
+com\ides\helpdesk\HelpDeskTicketLambdaHandler.class
+com\ides\users\UsersLambdaHandler$User.class
+com\ides\giinverification\HCTAEnrollmentValidatorLambdaHandler.class
+com\ides\giinverification\GIINVerificationLambdaHandler.class
+com\ides\login\LoginLambdaHandler.class
+com\ides\helpdesk\HelpDeskTicketLambdaHandler$HelpDeskTicket.class
+com\ides\users\UsersLambdaHandler.class

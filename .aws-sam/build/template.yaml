@@ -10,7 +10,7 @@ Resources:
   UsersLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.example.lambda.UsersLambdaHandler::handleRequest
+      Handler: com.ides.users.UsersLambdaHandler::handleRequest
       Events:
         UserApi:
           Type: Api
@@ -23,7 +23,7 @@ Resources:
   HelpDeskTicketLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.example.lambda.HelpDeskTicketLambdaHandler::handleRequest
+      Handler: com.ides.helpdesk.HelpDeskTicketLambdaHandler::handleRequest
       Events:
         HelpDeskTicketApi:
           Type: Api
@@ -36,7 +36,7 @@ Resources:
   LoginLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.example.lambda.LoginLambdaHandler::handleRequest
+      Handler: com.ides.login.LoginLambdaHandler::handleRequest
       Events:
         LoginApi:
           Type: Api
@@ -46,3 +46,29 @@ Resources:
       CodeUri: LoginLambda
     Metadata:
       SamResourceId: LoginLambda
+  GIINVerificationLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.giinverification.GIINVerificationLambdaHandler::handleRequest
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /getgiin
+            Method: post
+      CodeUri: GIINVerificationLambda
+    Metadata:
+      SamResourceId: GIINVerificationLambda
+  HCTAEnrollmentValidatorLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ides.giinverification.HCTAEnrollmentValidatorLambdaHandler::handleRequest
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /hcta
+            Method: post
+      CodeUri: HCTAEnrollmentValidatorLambda
+    Metadata:
+      SamResourceId: HCTAEnrollmentValidatorLambda
