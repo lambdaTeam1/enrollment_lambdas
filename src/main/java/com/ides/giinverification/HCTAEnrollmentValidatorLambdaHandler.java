@@ -41,7 +41,7 @@ public class HCTAEnrollmentValidatorLambdaHandler implements RequestHandler<APIG
             if (result != null) {
                 return createResponse(result, 200);
             } else {
-                return createResponse("Value not found or invalid", 404);
+                return createResponse("Type not supported", 400);
             }
         } catch (Exception e) {
             context.getLogger().log("Error processing request: " + e.getMessage());
@@ -52,40 +52,46 @@ public class HCTAEnrollmentValidatorLambdaHandler implements RequestHandler<APIG
     private Map<String, Object> verifyValue(String type, String value) throws Exception {
         try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             String sql;
+            PreparedStatement statement;
+            ResultSet resultSet;
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", true);
+            result.put("message", "Input is valid");
+
             if ("hcta-username".equals(type)) {
                 sql = "SELECT hcta_username, giin, is_admin_created FROM hcta_giin_mapping WHERE hcta_username = ?";
+                statement = conn.prepareStatement(sql);
+                statement.setString(1, value);
+                resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    result.put("giin", resultSet.getString("giin"));
+                    result.put("adminUserExists", resultSet.getBoolean("is_admin_created"));
+                } else {
+                    result.put("success", false);
+                    result.put("message", "HCTA username not found or invalid");
+                }
             } else if ("giin".equals(type)) {
                 sql = "SELECT giin_number, type, country FROM giin_records WHERE giin_number = ?";
+                statement = conn.prepareStatement(sql);
+                statement.setString(1, value);
+                resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    result.put("giin", resultSet.getString("giin_number"));
+                    result.put("adminUserExists", false); // Default to false as it's not applicable for this type
+                } else {
+                    result.put("success", false);
+                    result.put("message", "GIIN not found or invalid");
+                }
             } else {
                 return null;  // Type is neither "hcta-username" nor "giin"
             }
 
-            try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setString(1, value);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        Map<String, Object> result = new HashMap<>();
-                        if ("hcta-username".equals(type)) {
-                            result.put("success", true);
-                            result.put("message", "Input is valid");
-                            result.put("giin", resultSet.getString("giin"));
-                            result.put("adminUserExists", resultSet.getBoolean("is_admin_created"));
-                        } else if ("giin".equals(type)) {
-                            result.put("success", true);
-                            result.put("message", "GIIN found");
-                            result.put("giin_number", resultSet.getString("giin_number"));
-                            result.put("type", resultSet.getString("type"));
-                            result.put("country", resultSet.getString("country"));
-                            // adminUserExists not applicable for giin type, provide appropriate logic if needed
-                        }
-                        return result;
-                    }
-                }
-            }
+            resultSet.close();
+            statement.close();
+            return result;
         } catch (SQLException e) {
             throw new Exception("Database error: " + e.getMessage());
         }
-        return null;
     }
 
     private APIGatewayProxyResponseEvent createResponse(Object body, int statusCode) {
