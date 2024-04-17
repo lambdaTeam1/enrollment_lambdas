@@ -54,8 +54,8 @@ Resources:
         LoginApi:
           Type: Api
           Properties:
-            Path: /getgiin
-            Method: post
+            Path: /getGiin/{giin}
+            Method: GET
       CodeUri: GIINVerificationLambda
     Metadata:
       SamResourceId: GIINVerificationLambda
@@ -67,8 +67,8 @@ Resources:
         LoginApi:
           Type: Api
           Properties:
-            Path: /hcta
-            Method: post
+            Path: /validate
+            Method: get
       CodeUri: HCTAEnrollmentValidatorLambda
     Metadata:
       SamResourceId: HCTAEnrollmentValidatorLambda

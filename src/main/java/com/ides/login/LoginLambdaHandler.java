@@ -1,20 +1,27 @@
 package com.ides.login;
+
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.security.Key;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 
 public class LoginLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	private static final String DB_URL = "jdbc:postgresql://host.docker.internal:5432/mydatabase";
+    private static final String DB_URL = "jdbc:postgresql://host.docker.internal:5432/mydatabase";
     private static final String USERNAME = "postgres"; 
     private static final String PASSWORD = "mysecretpassword"; 
+    private static final Key SECRET_KEY = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
@@ -22,7 +29,8 @@ public class LoginLambdaHandler implements RequestHandler<APIGatewayProxyRequest
         try {
             User user = mapper.readValue(request.getBody(), User.class);
             if (authenticateUser(user.getUserName(), user.getPassword())) {
-                return createResponse("Login successful", 200);
+                String jwtToken = generateJWT(user.getUserName());
+                return createResponse(jwtToken, 200);
             } else {
                 return createResponse("Invalid username or password", 401);
             }
@@ -47,6 +55,15 @@ public class LoginLambdaHandler implements RequestHandler<APIGatewayProxyRequest
         statement.close();
         conn.close();
         return false;
+    }
+
+    private String generateJWT(String userName) {
+        return Jwts.builder()
+                .setSubject(userName)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // Token expires in 1 day
+                .signWith(SECRET_KEY)
+                .compact();
     }
 
     private APIGatewayProxyResponseEvent createResponse(String body, int statusCode) {

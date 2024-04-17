@@ -50,8 +50,8 @@ Resources:
         LoginApi:
           Type: Api
           Properties:
-            Path: /getgiin
-            Method: post
+            Path: /getGiin/{giin}
+            Method: GET
 
   HCTAEnrollmentValidatorLambda:
     Type: AWS::Serverless::Function
@@ -61,5 +61,5 @@ Resources:
         LoginApi:
           Type: Api
           Properties:
-            Path: /hcta
-            Method: post
+            Path: /validate
+            Method: get

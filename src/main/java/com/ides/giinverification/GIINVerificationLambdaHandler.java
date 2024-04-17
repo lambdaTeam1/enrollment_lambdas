@@ -4,7 +4,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,12 +21,12 @@ public class GIINVerificationLambdaHandler implements RequestHandler<APIGatewayP
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        ObjectMapper mapper = new ObjectMapper();
+        String giinNumber = request.getPathParameters().get("giin"); // Get giin number from path parameters
+
         try {
-            GIIN giin = mapper.readValue(request.getBody(), GIIN.class);
-            Map<String, String> result = verifyGIIN(giin.getGiinNumber());
+            Map<String, String> result = verifyGIIN(giinNumber);
             if (result != null) {
-                return createResponse(mapper.writeValueAsString(result), 200);
+                return createResponse(result, 200);
             } else {
                 return createResponse("GIIN not found", 404);
             }
@@ -58,17 +59,16 @@ public class GIINVerificationLambdaHandler implements RequestHandler<APIGatewayP
         return null;
     }
 
-    private APIGatewayProxyResponseEvent createResponse(String body, int statusCode) {
+    private APIGatewayProxyResponseEvent createResponse(Object body, int statusCode) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(statusCode);
-        response.setBody(body);
+        try {
+			response.setBody(body instanceof Map ? new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(body) : (String) body);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return response;
     }
-
-    static class GIIN {
-        private String giinNumber;
-
-        public String getGiinNumber() { return giinNumber; }
-        public void setGiinNumber(String giinNumber) { this.giinNumber = giinNumber; }
-    }
 }
+

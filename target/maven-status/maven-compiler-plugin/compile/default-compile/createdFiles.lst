@@ -1,6 +1,4 @@
-com\ides\giinverification\GIINVerificationLambdaHandler$GIIN.class
 com\ides\login\LoginLambdaHandler$User.class
-com\ides\giinverification\HCTAEnrollmentValidatorLambdaHandler$EnrollmentRequest.class
 com\ides\helpdesk\HelpDeskTicketLambdaHandler.class
 com\ides\users\UsersLambdaHandler$User.class
 com\ides\giinverification\HCTAEnrollmentValidatorLambdaHandler.class
