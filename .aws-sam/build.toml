@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "com.ides.users.UsersLambdaHandler::handleRequest"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["UsersLambda", "HelpDeskTicketLambda", "LoginLambda", "GIINVerificationLambda", "HCTAEnrollmentValidatorLambda"]
+functions = ["GIINVerificationLambda"]
 
 [layer_build_definitions]

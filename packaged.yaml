@@ -77,6 +77,8 @@ Resources:
             - s3:GetObject
             - s3:PutObject
             Resource: '*'
+    Metadata:
+      SamResourceId: MyLambdaRole
   GIINVerificationLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -91,6 +93,6 @@ Resources:
           Properties:
             Path: /getGiin/{giin}
             Method: GET
-      CodeUri: GIINVerificationLambda
+      CodeUri: s3://ideslambdas/fbdbf3f3d410dc74abfb80408ad9d104
     Metadata:
       SamResourceId: GIINVerificationLambda

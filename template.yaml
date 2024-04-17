@@ -9,57 +9,149 @@ Globals:
     Timeout: 120 
 
 Resources:
-  UsersLambda:
-    Type: AWS::Serverless::Function
+  MyLambdaRole:
+    Type: AWS::IAM::Role
     Properties:
-      Handler: com.ides.users.UsersLambdaHandler::handleRequest 
-      Events:
-        UserApi:
-          Type: Api
-          Properties:
-            Path: /users
-            Method: post
+      RoleName: MyLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaPermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:CreateFunction
+                  - lambda:UpdateFunctionCode
+                  - lambda:GetFunction
+                  - lambda:InvokeFunction
+                  - lambda:DeleteFunction
+                  - lambda:AddPermission
+                Resource: "*"
+        - PolicyName: IAMPermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:CreateRole
+                  - iam:AttachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:PassRole
+                Resource: "*"
+        - PolicyName: APIGatewayPermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - apigateway:*
+                Resource: "*"
+        - PolicyName: CloudFormationPermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:*
+                Resource: "*"
+        - PolicyName: RDSPermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds-data:*
+                  - rds:DescribeDBClusters
+                Resource: "*"
+        - PolicyName: S3PermissionsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: "*"
 
-  HelpDeskTicketLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.ides.helpdesk.HelpDeskTicketLambdaHandler::handleRequest 
-      Events:
-        HelpDeskTicketApi:
-          Type: Api
-          Properties:
-            Path: /tickets
-            Method: post
+  # UsersLambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: com.ides.users.UsersLambdaHandler::handleRequest 
+  #     Role: !GetAtt MyLambdaRole.Arn
+  #     Events:
+  #       UserApi:
+  #         Type: Api
+  #         Properties:
+  #           Path: /users
+  #           Method: post
 
-  LoginLambda:
+  # HelpDeskTicketLambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: com.ides.helpdesk.HelpDeskTicketLambdaHandler::handleRequest 
+  #     Role: !GetAtt MyLambdaRole.Arn
+  #     Events:
+  #       HelpDeskTicketApi:
+  #         Type: Api
+  #         Properties:
+  #           Path: /tickets
+  #           Method: post
+
+  # LoginLambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: com.ides.login.LoginLambdaHandler::handleRequest 
+  #     Role: !GetAtt MyLambdaRole.Arn
+  #     Events:
+  #       LoginApi:
+  #         Type: Api
+  #         Properties:
+  #           Path: /login
+  #           Method: post
+
+  # HCTAEnrollmentValidatorLambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: com.ides.giinverification.HCTAEnrollmentValidatorLambdaHandler::handleRequest 
+  #     Role: !GetAtt MyLambdaRole.Arn
+  #     Events:
+  #       LoginApi:
+  #         Type: Api
+  #         Properties:
+  #           Path: /validate
+  #           Method: get
+
+  # GIINVerificationLambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: com.ides.giinverification.GIINVerificationLambdaHandler::handleRequest 
+  #     Role: !GetAtt MyLambdaRole.Arn
+  #     Events:
+  #       LoginApi:
+  #         Type: Api
+  #         Properties:
+  #           Path: /getGiin/{giin}
+  #           Method: GET
+  #           RestApiId: 468uq5zpz7
+
+
+  AuroraConnectionVerifierLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.ides.login.LoginLambdaHandler::handleRequest 
+      Handler: com.ides.giinverification.AuroraConnectionVerifier::handleRequest 
+      Role: !GetAtt MyLambdaRole.Arn
       Events:
         LoginApi:
           Type: Api
           Properties:
-            Path: /login
-            Method: post
-
-  GIINVerificationLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.ides.giinverification.GIINVerificationLambdaHandler::handleRequest 
-      Events:
-        LoginApi:
-          Type: Api
-          Properties:
-            Path: /getGiin/{giin}
+            Path: /test
             Method: GET
 
-  HCTAEnrollmentValidatorLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.ides.giinverification.HCTAEnrollmentValidatorLambdaHandler::handleRequest 
-      Events:
-        LoginApi:
-          Type: Api
-          Properties:
-            Path: /validate
-            Method: get
+
