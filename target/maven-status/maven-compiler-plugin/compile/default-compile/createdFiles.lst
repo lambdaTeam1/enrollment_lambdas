@@ -1,5 +1,6 @@
 com\ides\login\LoginLambdaHandler$User.class
 com\ides\giinverification\CertificateDecoder.class
+com\ides\giinverification\AuroraConnectionVerifier.class
 com\ides\helpdesk\HelpDeskTicketLambdaHandler.class
 com\ides\users\UsersLambdaHandler$User.class
 com\ides\giinverification\HCTAEnrollmentValidatorLambdaHandler.class

@@ -15,13 +15,13 @@ import java.util.Map;
 
 public class GIINVerificationLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-//    private static final String DB_URL = "jdbc:postgresql://host.docker.internal:5432/mydatabase";
-//    private static final String USERNAME = "postgres"; 
-//    private static final String PASSWORD = "mysecretpassword"; 
-//    
-    private static final String DB_URL = "jdbc:postgresql://facta-ides-instance-1.citapqw7l8pf.us-gov-west-1.rds.amazonaws.com:5432/postgres";
+    private static final String DB_URL = "jdbc:postgresql://host.docker.internal:5432/mydatabase";
     private static final String USERNAME = "postgres"; 
-    private static final String PASSWORD = "Jut545krby"; 
+    private static final String PASSWORD = "mysecretpassword"; 
+//    
+//    private static final String DB_URL = "jdbc:postgresql://facta-ides-instance-1.citapqw7l8pf.us-gov-west-1.rds.amazonaws.com:5432/postgres";
+//    private static final String USERNAME = "postgres"; 
+//    private static final String PASSWORD = "Jut545krby"; 
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
